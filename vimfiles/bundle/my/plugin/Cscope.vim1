@@ -1,0 +1,91 @@
+"=============================================================================
+"     FileName: Cscope.vim
+"         Desc: Cscope setting
+"       Author: QianChenglong
+"        Email: qian_cheng_long@163.com
+"      Version: 1.0
+"   LastChange: 2012-08-01 20:53:26
+"      History:
+"=============================================================================
+" SECTION: Init"{{{
+if exists("g:loaded_MyC_Cscope")
+    finish
+endif
+let g:loaded_MyC_Cscope = 1
+"}}}
+" SECTION: Options"{{{
+let s:save_cpo = &cpo
+set cpo&vim
+
+"find . -name "*.cpp" > cscope.files
+"cscope -bkq -i cscope.files
+if has("cscope")
+    "结果显示在quickfix中，每次清除上次的内容
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+    "先搜索tags标签文件，再搜索cscope数据库
+    set csto=1
+    "使用:cstag(:cs find g)，而不是缺省的:tag
+    set cst
+    "会显示文件路径的最后 3 个部分，包括文件名本身。
+    set cspc=3
+    "不显示添加数据库是否成功
+    set nocsverb
+    " add any database in current directory
+    "let old_dir = getcwd()
+    if filereadable(".cscope.out")
+        "添加cscope数据库
+        " 因为在win下，含有中文路径的无法添加，所以临时切换编码
+        if has("win32") || has("win64")
+            set encoding=chinese
+        endif
+        exe "cs add .cscope.out"
+        set encoding=utf-8
+    endif
+    set csverb
+endif
+"}}}
+" SECTION: Global varibles"{{{
+" directory to execute cscope"{{{
+let s:MyC_Cscope_dir = ''
+"}}}
+"}}}
+" SECTION: Functions"{{{
+" MyC_Cscope()"{{{
+fun! s:MyC_Cscope()
+    " if s:MyC_Cscope_dir == ''
+    " let s:MyC_Cscope_dir = input("directory to execute cscope:", expand("%:p:h"), "file")
+    " endif
+    " if !isdirectory(s:MyC_Cscope_dir)
+    " echohl WarningMsg | echo 'No such directory!' | echohl none
+    " return
+    " endif
+
+    " let save_cwd = getcwd() . '/'
+    " silent exe 'lcd ' . s:MyC_Cscope_dir
+    exe '!' . &csprg . ' -Rbq -f .cscope.out'
+    if !filereadable(".cscope.out")
+        set encoding=chinese
+        silent! exe 'cs reset'
+        set encoding=utf-8
+    else
+        set encoding=chinese
+        cs add .cscope.out
+        set encoding=utf-8
+    endif
+    " silent exe 'lcd ' . save_cwd
+    "echohl Finished | echo 'cscope finished' | echohl none
+endf"}}}
+"}}}
+" SECTION: Maps"{{{
+nmap    <A-F12>   :call <SID>MyC_Cscope()<CR>
+silent! nmap    <C-\>s  :cs find s <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+nmap    <C-\>g  :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap    <C-\>c  :cs find c <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+nmap    <C-\>t  :cs find t <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+nmap    <C-\>e  :cs find e <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+nmap    <C-\>f  :cs find f <C-R>=expand("<cfile>")<CR><CR>:copen<CR>
+nmap    <C-\>i  :cs find i <C-R>=expand("<cfile>")<CR><CR>:copen<CR>
+nmap    <C-\>d  :cs find d <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+nmap    <C-\>g :scs find g <C-R>=expand("<cword>")<CR><CR>
+"}}}
+let &cpo = s:save_cpo

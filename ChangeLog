@@ -1,0 +1,4 @@
+2013-11-29  QianChenglong   <qian_cheng_long@163.com>
+
+    * vimrc:
+            1. 修改HOME，和runtimepath以便自定义文件插件起作用

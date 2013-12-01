@@ -1,0 +1,13 @@
+# Ctags设计
+
+## 全局变量
+
+### VIMRC中指定
+* g:Ctags_bin(用来指定Ctags执行路径)
+
+### 文件类型插件中指定
+* g:Ctags_ignore(指定要忽略的宏)
+* g:Ctags_option(执行选项)
+
+## 映射定义
+* <Plug>Ctags(默认Alt+t)

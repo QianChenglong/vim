@@ -1,0 +1,8 @@
+# 插件列表
+
+* cctree         函数调用树
+* ctrlp          文件，缓冲区，最近打开文件搜索
+* mcomment       注释
+* syntastic      语法检查
+* vim-easy-align 字段对齐
+* YouCompleteMe  补全

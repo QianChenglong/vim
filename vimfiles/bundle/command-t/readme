@@ -1,0 +1,6 @@
+ vim command-t.vba
+ :so %
+sudo aptitude install ruby1.8-dev
+cd ~/.vim/ruby/command-t
+ruby extconf.rb 
+make 
